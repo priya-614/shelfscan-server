@@ -5,10 +5,9 @@ import shutil, os
 
 app = FastAPI()
 
-# ADD THIS — allows your HTML app to talk to the server
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # allows all origins
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -20,8 +19,8 @@ model = YOLO("best.pt")
 def root():
     return {"status": "ShelfScan server is running"}
 
-@app.post("/predict")
-async def predict(file: UploadFile = File(...)):
+@app.post("/detect")  # ← matches what your app is calling
+async def detect(file: UploadFile = File(...)):
     temp_path = f"/tmp/{file.filename}"
     with open(temp_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
