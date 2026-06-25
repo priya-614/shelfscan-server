@@ -1,8 +1,19 @@
 from fastapi import FastAPI, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from ultralytics import YOLO
 import shutil, os
 
 app = FastAPI()
+
+# ADD THIS — allows your HTML app to talk to the server
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 model = YOLO("best.pt")
 
 @app.get("/")
